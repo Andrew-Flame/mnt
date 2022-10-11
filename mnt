@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!bash
 
 # Get all disk parts with labels with simple regex
 DATA=$(lsblk -nio PATH,LABEL | expand | grep -E '^/dev/\w{3}[0-9]+.*(\w|\d)+')
