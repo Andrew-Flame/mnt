@@ -1,0 +1,71 @@
+#!/usr/bin/bash
+
+# Get all disk parts with labels with simple regex
+DATA=$(lsblk -nio PATH,LABEL | expand | grep -E '^/dev/\w{3}[0-9]+.*(\w|\d)+')
+IFS=$'\n' # Only new-line charachter is separator
+declare -A assoc # Associative array with parts labels
+declare -A parts # Array with disks parts
+mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
+touch ~/.config/mnt/config # Create config file if it doesn't exists
+
+for var in $(cat ~/.config/mnt/config | grep -E '^.*=.*$')
+do
+    # Get assosiations for part labels
+    name1=$(echo $var | awk -F '=' '{print $1}')
+    name2=$(echo $var | awk -F '=' '{print $2}')
+
+    # Make asociations
+    assoc[$name1]=$name2
+done
+
+for var in $DATA
+do
+    # Get /dev/name and label of parts
+    dev=$(echo $var | awk '{print $1}')
+    label=$(echo $var | awk '{$1=""; print $0}' | sed -r 's/^ *| *$//g')
+
+    parts[$label]="$dev"
+done
+
+declare -a REQUEST
+OFF=0
+for var in ${!parts[*]}
+do
+    REQUEST[OFF++]=$var
+    REQUEST[OFF++]=${parts[$var]}
+
+    if [[ $(lsblk -o MOUNTPOINT ${parts[$var]}) == *'/'* ]]
+    then REQUEST[OFF++]=ON
+    else REQUEST[OFF++]=OFF
+    fi
+done
+
+# Find out which disks need to be mounted and which ones need to be unmounted
+QUERY=$(whiptail --title "Disk mount dialog" --checklist "Select the disks to mount" $((${#parts[*]}+7)) 75 ${#parts[*]} ${REQUEST[*]} 3>&1 1>&2 2>&3)
+if [[ $? != 0 ]]
+then
+    echo "The operation was canceled"
+    exit 1
+fi
+
+
+for var in ${!parts[*]}
+do
+    name=$var
+
+    if [[ ${!assoc[*]} == *$var* ]]
+    then
+        name=${assoc[$var]}
+    fi
+
+    if [[ $QUERY == *$var* ]]
+    then
+        sudo mkdir "/mnt/$name" -p
+        sudo mount ${parts[$var]} /mnt/$name 2>/dev/null && \
+        echo "$var was mounted"
+    else
+        sudo umount ${parts[$var]} --quiet && \
+        sudo rmdir /mnt/$name 2>/dev/null && \
+        echo "$var was unmounted"
+    fi
+done
