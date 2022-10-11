@@ -1,0 +1,26 @@
+#!/usr/bin/bash
+
+chmod 700 -R .
+chmod 755 install mnt # Set permissions
+
+# Check dependencies
+if [[ -z $(command -v whiptail) ]]
+then
+    echo 'You need to install "whiptail" to your distribution'
+fi
+
+if [[ ! -e /usr/bin/mnt ]] # If link doesn't exist
+then
+    # Create a link for this programm if directory with binary files
+    sudo ln ./mnt /usr/bin/mnt
+else # If link or file already exists
+    if [[ ! -e /usr/sbin/mnt ]] # Trying to install in the sbin folder
+    then
+        sudo ln ./mnt /usr/sbin/mnt
+    else
+        echo 'File /usr/bin/mnt already exists'
+        exit 1
+    fi
+fi
+
+echo 'The program has been successfully installed on your computer'
