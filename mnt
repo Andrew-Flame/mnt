@@ -44,7 +44,7 @@ done
 QUERY=$(whiptail --title "Disk mount dialog" --checklist "Select the disks to mount" $((${#parts[*]}+7)) 75 ${#parts[*]} ${REQUEST[*]} 3>&1 1>&2 2>&3)
 if [[ $? != 0 ]]
 then
-    echo "The operation was canceled"
+    echo "The operation was canceled by user"
     exit 1
 fi
 
