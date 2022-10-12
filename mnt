@@ -62,7 +62,7 @@ do
     then
         sudo mkdir "/mnt/$name" -p
         sudo mount ${parts[$var]} /mnt/$name 2>/dev/null && \
-        echo "$var was mounted"
+        echo "$var was mounted to /mnt/$name"
     else
         sudo umount ${parts[$var]} --quiet && \
         sudo rmdir /mnt/$name 2>/dev/null && \
