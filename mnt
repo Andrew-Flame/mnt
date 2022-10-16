@@ -6,9 +6,9 @@ IFS=$'\n' # Only new-line charachter is separator
 declare -A assoc # Associative array with parts labels
 declare -A parts # Array with disks parts
 mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
-touch ~/.config/mnt/config # Create config file if it doesn't exists
+touch ~/.config/mnt/associations # Create config file if it doesn't exists
 
-for var in $(cat ~/.config/mnt/config | grep -E '^.*=.*$')
+for var in $(cat ~/.config/mnt/associations | grep -E '^.*=.*$')
 do
     # Get assosiations for part labels
     name1=$(echo $var | awk -F '=' '{print $1}')

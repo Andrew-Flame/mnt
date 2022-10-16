@@ -5,7 +5,7 @@ chmod 700 -R .
 chmod 755 install mnt
 
 mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
-touch ~/.config/mnt/config # Create config file if it doesn't exists
+touch ~/.config/mnt/associations # Create config file if it doesn't exists
 
 # Check dependencies
 if [[ -z $(command -v whiptail) ]]
