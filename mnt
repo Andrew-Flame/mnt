@@ -24,7 +24,7 @@ do
     dev=$(echo $var | awk '{print $1}')
     label=$(echo $var | awk '{$1=""; print $0}' | sed -r 's/^ *| *$//g')
 
-    parts[$label]="$dev"
+    parts[$label]=$dev
 done
 
 declare -a REQUEST
