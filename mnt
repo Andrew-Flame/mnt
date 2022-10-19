@@ -1,16 +1,19 @@
-#!bash
+#!/usr/bin/bash
 
 # Get all disk parts with labels with simple regex
 DATA=$(lsblk -nio PATH,LABEL | expand | grep -E '^/dev/\w{3}[0-9]+.*(\w|\d)+')
 IFS=$'\n' # Only new-line charachter is separator
+
 declare -A assoc # Associative array with parts labels
 declare -A parts # Array with disks parts
-mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
-touch ~/.config/mnt/associations # Create config file if it doesn't exists
 
-for var in $(cat ~/.config/mnt/associations | grep -E '^.*=.*$')
+# Create or touch config file
+mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
+touch ~/.config/mnt/config.ini # Create config file if it doesn't exists
+
+for var in $(cat ~/.config/mnt/config.ini | grep -E '^.*=.*$')
 do
-    # Get assosiations for part labels
+    # Get associations for part labels
     name1=$(echo $var | awk -F '=' '{print $1}')
     name2=$(echo $var | awk -F '=' '{print $2}')
 
@@ -18,15 +21,16 @@ do
     assoc[$name1]=$name2
 done
 
+# Get /dev/name and label of parts
 for var in $DATA
 do
-    # Get /dev/name and label of parts
     dev=$(echo $var | awk '{print $1}')
     label=$(echo $var | awk '{$1=""; print $0}' | sed -r 's/^ *| *$//g')
 
     parts[$label]=$dev
 done
 
+# Get the list of disks in the required form
 declare -a REQUEST
 OFF=0
 for var in ${!parts[*]}
@@ -48,7 +52,7 @@ then
     exit 1
 fi
 
-
+# We mount the marked disks and unmount the unmarked ones
 for var in ${!parts[*]}
 do
     name=$var
@@ -69,3 +73,5 @@ do
         echo "$var was unmounted"
     fi
 done
+
+exit 0 # The program worked without errors
