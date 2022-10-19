@@ -1,5 +1,17 @@
 #!/usr/bin/bash
 
+# Function to get section of ini file
+function getConfigSection() {
+    COUNT=$(grep -A64 -Ex "^\[$2\]$" $1 | grep -Ex "^\[.*\]" -c)
+    if [[ "$COUNT" -eq "1" ]]
+    then
+        grep -A64 -Ex "^\[${2}\]$" ${1} | grep -Ex "^.*=.*$" | sed "s/ *= */=/g"
+    else
+        grep -A64 -Ex "^\[${2}\]$" ${1} | 
+        grep -B64 -Ex "^\[[^${2:0:1}].*\]$" | grep -Ex "^.*=.*$" | sed "s/ *= */=/g"
+    fi
+}
+
 # Get all disk parts with labels with simple regex
 DATA=$(lsblk -nio PATH,LABEL | expand | grep -E '^/dev/\w{3}[0-9]+.*(\w|\d)+')
 IFS=$'\n' # Only new-line charachter is separator
@@ -11,9 +23,9 @@ declare -A parts # Array with disks parts
 mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
 touch ~/.config/mnt/config.ini # Create config file if it doesn't exists
 
-for var in $(cat ~/.config/mnt/config.ini | grep -E '^.*=.*$')
+# Get associations for part labels
+for var in $(getConfigSection ~/.config/mnt/config.ini associations)
 do
-    # Get associations for part labels
     name1=$(echo $var | awk -F '=' '{print $1}')
     name2=$(echo $var | awk -F '=' '{print $2}')
 
