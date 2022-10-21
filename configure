@@ -1,0 +1,25 @@
+#!/usr/bin/bash
+
+mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
+touch ~/.config/mnt/config.ini # Create config file if it doesn't exists
+
+# Get all disk parts with labels with simple regex
+DATA=$(lsblk -nio LABEL | expand | grep -E '.+')
+IFS=$'\n' # Only new-line charachter is separator
+OUT='' # A string for output a standard disk association
+
+# Get labels of parts
+for var in $DATA
+do
+    OUT+="$var=$var/"
+done
+
+grep -B64 '<placeholder>associations<\/placeholder>' templates/config.ini | 
+grep -v '<placeholder>associations<\/placeholder>' > ~/.config/mnt/config.ini
+echo ${OUT:0:-1} | tr '/' '\n' >> ~/.config/mnt/config.ini
+grep -A64 '<placeholder>associations<\/placeholder>' templates/config.ini | 
+grep -v '<placeholder>associations<\/placeholder>' >> ~/.config/mnt/config.ini
+
+echo 'The configuration file was successfully created!
+It is located in the directory ~/.config/mnt/
+You can manually change any values specified in it'
