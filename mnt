@@ -8,7 +8,8 @@ function getConfigSection() {
         grep -A64 -Ex "^\[${2}\]$" ${1} | grep -Ex "^.*=.*$" | sed "s/ *= */=/g"
     else
         grep -A64 -Ex "^\[${2}\]$" ${1} | 
-        grep -B64 -Ex "^\[[^${2:0:1}].*\]$" | grep -Ex "^.*=.*$" | sed "s/ *= */=/g"
+        grep -B64 -Ex "^\[[^${2:0:1}].*\]$" | grep -Ex "^.*=.*$" | 
+        sed "s/ *= */=/g"
     fi
 }
 
@@ -57,7 +58,9 @@ do
 done
 
 # Find out which disks need to be mounted and which ones need to be unmounted
-QUERY=$(whiptail --title "Disk mount dialog" --checklist "Select the disks to mount" $((${#parts[*]}+7)) 75 ${#parts[*]} ${REQUEST[*]} 3>&1 1>&2 2>&3)
+QUERY=$(whiptail --title "Disk mount dialog" --checklist \
+"Select the disks to mount" $((${#parts[*]}+7)) 75 ${#parts[*]} \
+${REQUEST[*]} 3>&1 1>&2 2>&3)
 if [[ $? != 0 ]]
 then
     echo "The operation was canceled by user"

@@ -2,10 +2,26 @@
 
 # Set permissions
 chmod 700 -R .
-chmod 755 install mnt
+chmod 755 install mnt configure
 
 mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
-touch ~/.config/mnt/associations # Create config file if it doesn't exists
+touch ~/.config/mnt/config.ini # Create config file if it doesn't exists
+
+# Fill in the configuration file with data from the template
+if [[ -z $(cat ~/.config/mnt/config.ini) ]] # If config file is empty
+then
+    source configure
+else
+    echo -n The configuration file already exists, \
+    do you want to overwrite it? [Y/n] "" && read ans
+    if [[ $(echo $ans | tr [:upper:] [:lower:]) =~ ^y.*$ ]]
+    then
+        echo
+        source configure
+    fi
+fi
+
+exit 0;
 
 # Check dependencies
 if [[ -z $(command -v whiptail) ]]
