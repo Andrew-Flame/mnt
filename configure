@@ -4,21 +4,29 @@ mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
 touch ~/.config/mnt/config.ini # Create config file if it doesn't exists
 
 # Get all disk parts with labels with simple regex
-DATA=$(lsblk -nio LABEL | expand | grep -E '.+')
+DATA=$(lsblk -nio LABEL | expand)
 IFS=$'\n' # Only new-line charachter is separator
-OUT='' # A string for output a standard disk association
+
+ASSOC='' # A string for output a standard disk association
+IGNORING='' # A string for output a standart disk ignoring
 
 # Get labels of parts
 for var in $DATA
 do
-    OUT+="$var=$var/"
+    ASSOC+="$var = $var/"
+    IGNORING+="$var = ON/"
 done
 
 grep -B64 '<placeholder>associations<\/placeholder>' templates/config.ini | 
 grep -v '<placeholder>associations<\/placeholder>' > ~/.config/mnt/config.ini
-echo ${OUT:0:-1} | tr '/' '\n' >> ~/.config/mnt/config.ini
+echo ${ASSOC:0:-1} | tr '/' '\n' >> ~/.config/mnt/config.ini
 grep -A64 '<placeholder>associations<\/placeholder>' templates/config.ini | 
-grep -v '<placeholder>associations<\/placeholder>' >> ~/.config/mnt/config.ini
+grep -v '<placeholder>associations<\/placeholder>' | 
+grep -B64 '<placeholder>display</placeholder>' | 
+grep -v '<placeholder>display</placeholder>' >> ~/.config/mnt/config.ini
+echo ${IGNORING:0:-1} | tr '/' '\n' >> ~/.config/mnt/config.ini
+grep -A64 '<placeholder>display</placeholder>' templates/config.ini | 
+grep -v '<placeholder>display</placeholder>' >> ~/.config/mnt/config.ini
 
 echo 'The configuration file was successfully created!
 It is located in the directory ~/.config/mnt/

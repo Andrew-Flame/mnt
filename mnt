@@ -2,13 +2,13 @@
 
 # Function to get section of ini file
 function getConfigSection() {
-    COUNT=$(grep -A64 -Ex "^\[$2\]$" $1 | grep -Ex "^\[.*\]" -c)
+    COUNT=$(grep -A64 -Ex "^\[$1\]$" ~/.config/mnt/config.ini | grep -Ex "^\[.*\]" -c)
     if [[ "$COUNT" -eq "1" ]]
     then
-        grep -A64 -Ex "^\[${2}\]$" ${1} | grep -Ex "^.*=.*$" | sed "s/ *= */=/g"
+        grep -A64 -Ex "^\[$1\]$" ~/.config/mnt/config.ini | grep -Ex "^[^#;].*=.*$" | sed "s/ *= */=/g"
     else
-        grep -A64 -Ex "^\[${2}\]$" ${1} | 
-        grep -B64 -Ex "^\[[^${2:0:1}].*\]$" | grep -Ex "^.*=.*$" | 
+        grep -A64 -Ex "^\[$1\]$" ~/.config/mnt/config.ini | 
+        grep -B64 -Ex "^\[[^${1:0:1}].*\]$" | grep -Ex "^[^#;].*=.*$" | 
         sed "s/ *= */=/g"
     fi
 }
@@ -25,7 +25,7 @@ mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
 touch ~/.config/mnt/config.ini # Create config file if it doesn't exists
 
 # Get associations for part labels
-for var in $(getConfigSection ~/.config/mnt/config.ini associations)
+for var in $(getConfigSection associations)
 do
     name1=$(echo $var | awk -F '=' '{print $1}')
     name2=$(echo $var | awk -F '=' '{print $2}')
