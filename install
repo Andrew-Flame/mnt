@@ -43,3 +43,4 @@ else # If link or file already exists
 fi
 
 echo 'The program has been successfully installed on your computer'
+exit 0 # The program worked without errors

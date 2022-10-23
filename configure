@@ -31,3 +31,4 @@ grep -v '<placeholder>display</placeholder>' >> ~/.config/mnt/config.ini
 echo 'The configuration file was successfully created!
 It is located in the directory ~/.config/mnt/
 You can manually change any values specified in it'
+exit 0 # The program worked without errors
