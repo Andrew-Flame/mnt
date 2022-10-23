@@ -18,10 +18,9 @@ else
     then
         echo
         source configure
+        echo
     fi
 fi
-
-exit 0;
 
 # Check dependencies
 if [[ -z $(command -v whiptail) ]]

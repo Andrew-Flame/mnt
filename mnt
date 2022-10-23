@@ -8,7 +8,7 @@ function getConfigSection() {
         grep -A64 -Ex "^\[$1\]$" ~/.config/mnt/config.ini | grep -Ex "^[^#;].*=.*$" | sed "s/ *= */=/g"
     else
         grep -A64 -Ex "^\[$1\]$" ~/.config/mnt/config.ini | 
-        grep -B64 -Ex "^\[[^${1:0:1}].*\]$" | grep -Ex "^[^#;].*=.*$" | 
+        grep -B64 -Ex "^\[[^${1:0:1}].*\]$" -m1 | grep -Ex "^[^#;].*=.*$" | 
         sed "s/ *= */=/g"
     fi
 }
@@ -19,6 +19,7 @@ IFS=$'\n' # Only new-line charachter is separator
 
 declare -A assoc # Associative array with parts labels
 declare -A parts # Array with disks parts
+declare ignore # Array with ignored disks
 
 # Create or touch config file
 mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
@@ -27,11 +28,23 @@ touch ~/.config/mnt/config.ini # Create config file if it doesn't exists
 # Get associations for part labels
 for var in $(getConfigSection associations)
 do
-    name1=$(echo $var | awk -F '=' '{print $1}')
-    name2=$(echo $var | awk -F '=' '{print $2}')
+    label1=$(echo $var | awk -F '=' '{print $1}')
+    label2=$(echo $var | awk -F '=' '{print $2}')
 
     # Make asociations
-    assoc[$name1]=$name2
+    assoc[$label1]=$label2
+done
+
+# Get list of ignored disks
+for var in $(getConfigSection display)
+do
+    label=$(echo $var | awk -F '=' '{print $1}')
+    state=$(echo $var | awk -F '=' '{print $2}')
+
+    if [[ $state == "OFF" ]]
+    then
+        ignore+=($label)
+    fi
 done
 
 # Get /dev/name and label of parts
@@ -40,7 +53,10 @@ do
     dev=$(echo $var | awk '{print $1}')
     label=$(echo $var | awk '{$1=""; print $0}' | sed -r 's/^ *| *$//g')
 
-    parts[$label]=$dev
+    if [[ ${ignore[*]} !=  *$label* ]]
+    then
+        parts[$label]=$dev
+    fi
 done
 
 # Get the list of disks in the required form
