@@ -25,6 +25,8 @@ declare ignore # Array with ignored disks
 mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
 touch ~/.config/mnt/config.ini # Create config file if it doesn't exists
 
+source <(getConfigSection general) #Get the necessary variables
+
 # Get associations for part labels
 for var in $(getConfigSection associations)
 do
