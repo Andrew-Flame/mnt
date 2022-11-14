@@ -61,13 +61,20 @@ do
     fi
 done
 
+width=29 #A whiptail width
+
 # Get the list of disks in the required form
 declare -a REQUEST
 OFF=0
 for var in ${!parts[*]}
 do
+    tmpWidth=$((${#var} + ${#mountpoint} + ${#assoc[$var]} + 17))
+    if [[ $tmpWidth -gt width ]]
+    then width=$tmpWidth
+    fi
+
     REQUEST[OFF++]=$var
-    REQUEST[OFF++]=${parts[$var]}
+    REQUEST[OFF++]="$mountpoint/${assoc[$var]}"
 
     if [[ $(lsblk -o MOUNTPOINT ${parts[$var]}) == *'/'* ]]
     then REQUEST[OFF++]=ON
@@ -77,7 +84,7 @@ done
 
 # Find out which disks need to be mounted and which ones need to be unmounted
 QUERY=$(whiptail --title "Disk mount dialog" --checklist \
-"Select the disks to mount" $((${#parts[*]}+7)) 75 ${#parts[*]} \
+"Select the disks to mount" $((${#parts[*]}+7)) $width ${#parts[*]} \
 ${REQUEST[*]} 3>&1 1>&2 2>&3)
 if [[ $? != 0 ]]
 then
@@ -97,12 +104,12 @@ do
 
     if [[ $QUERY == *$var* ]]
     then
-        sudo mkdir "/mnt/$name" -p
-        sudo mount ${parts[$var]} /mnt/$name 2>/dev/null && \
-        echo "$var was mounted to /mnt/$name"
+        sudo mkdir "$mountpoint/$name" -p
+        sudo mount ${parts[$var]} "$mountpoint/$name" 2>/dev/null && \
+        echo "$var was mounted to $mountpoint/$name"
     else
         sudo umount ${parts[$var]} --quiet && \
-        sudo rmdir /mnt/$name 2>/dev/null && \
+        sudo rmdir "$mountpoint/$name" 2>/dev/null && \
         echo "$var was unmounted"
     fi
 done
