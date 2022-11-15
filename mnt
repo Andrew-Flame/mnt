@@ -68,13 +68,11 @@ declare -a REQUEST
 OFF=0
 for var in ${!parts[*]}
 do
-    tmpWidth=$((${#var} + ${#mountpoint} + ${#assoc[$var]} + 17))
-    if [[ $tmpWidth -gt width ]]
-    then width=$tmpWidth
-    fi
+    tmpWidth=$((${#var} + 25))
+    if [[ $tmpWidth -gt $width ]]; then width=$tmpWidth; fi
 
     REQUEST[OFF++]=$var
-    REQUEST[OFF++]="$mountpoint/${assoc[$var]}"
+    REQUEST[OFF++]=${parts[$var]}
 
     if [[ $(lsblk -o MOUNTPOINT ${parts[$var]}) == *'/'* ]]
     then REQUEST[OFF++]=ON
@@ -97,10 +95,7 @@ for var in ${!parts[*]}
 do
     name=$var
 
-    if [[ ${!assoc[*]} == *$var* ]]
-    then
-        name=${assoc[$var]}
-    fi
+    if [[ ! -z ${assoc[$var]} ]]; then name=${assoc[$var]}; fi
 
     if [[ $QUERY == *$var* ]]
     then
