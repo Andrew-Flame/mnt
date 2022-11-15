@@ -4,11 +4,10 @@
 chmod 700 -R .
 chmod 755 install mnt configure
 
-mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
-touch ~/.config/mnt/config.ini # Create config file if it doesn't exists
+touch ~/.config/mnt.ini # Create config file if it doesn't exists
 
 # Fill in the configuration file with data from the template
-if [[ -z $(cat ~/.config/mnt/config.ini) ]] # If config file is empty
+if [[ -z $(cat ~/.config/mnt.ini) ]] # If config file is empty
 then
     source configure
 else

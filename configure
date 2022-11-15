@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
-mkdir ~/.config/mnt/ -p # Create config directory if it doesn't exists
-touch ~/.config/mnt/config.ini # Create config file if it doesn't exists
+touch ~/.config/mnt.ini # Create config file if it doesn't exists
 
 # Get all disk parts with labels with simple regex
 DATA=$(lsblk -nio LABEL | expand)
@@ -18,17 +17,17 @@ do
 done
 
 grep -B64 '<placeholder>associations<\/placeholder>' templates/config.ini | 
-grep -v '<placeholder>associations<\/placeholder>' > ~/.config/mnt/config.ini
-echo ${ASSOC:0:-1} | tr '/' '\n' >> ~/.config/mnt/config.ini
+grep -v '<placeholder>associations<\/placeholder>' > ~/.config/mnt.ini
+echo ${ASSOC:0:-1} | tr '/' '\n' >> ~/.config/mnt.ini
 grep -A64 '<placeholder>associations<\/placeholder>' templates/config.ini | 
 grep -v '<placeholder>associations<\/placeholder>' | 
 grep -B64 '<placeholder>display</placeholder>' | 
-grep -v '<placeholder>display</placeholder>' >> ~/.config/mnt/config.ini
-echo ${IGNORING:0:-1} | tr '/' '\n' >> ~/.config/mnt/config.ini
+grep -v '<placeholder>display</placeholder>' >> ~/.config/mnt.ini
+echo ${IGNORING:0:-1} | tr '/' '\n' >> ~/.config/mnt.ini
 grep -A64 '<placeholder>display</placeholder>' templates/config.ini | 
-grep -v '<placeholder>display</placeholder>' >> ~/.config/mnt/config.ini
+grep -v '<placeholder>display</placeholder>' >> ~/.config/mnt.ini
 
 echo 'The configuration file was successfully created!
-It is located in the directory ~/.config/mnt/
+Its location is ~/.config/mnt.ini
 You can manually change any values specified in it'
 exit 0 # The program worked without errors
