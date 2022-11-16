@@ -24,6 +24,7 @@ declare ignore # Array with ignored disks
 # Create or touch config file
 touch ~/.config/mnt.ini # Create config file if it doesn't exists
 
+# Default variables
 mountpoint="/mnt"
 language="en"
 source <(getConfigSection general) #Get the necessary variables
@@ -69,6 +70,7 @@ declare -a REQUEST
 OFF=0
 for var in ${!parts[*]}
 do
+    # Get the required width
     tmpWidth=$((${#var} + 25))
     if [[ $tmpWidth -gt $width ]]; then width=$tmpWidth; fi
 
