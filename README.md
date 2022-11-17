@@ -1,4 +1,4 @@
-<div style='text-align: center'>
+<div align=center style='text-align: center'>
     <img src='images/logo.svg' width=20%/><br>
     <img src='https://img.shields.io/github/repo-size/Andrew-Flame/mnt?style=for-the-badge'/>
     <img src='https://img.shields.io/github/license/Andrew-Flame/mnt?color=%233FBA12&style=for-the-badge'><br>
@@ -28,6 +28,7 @@ You can configure:
   ```
 - The display of disks in the dialog window. Example
   ```INI
+  [display]
   # Default: ON
   Disk C = OFF
   Disk I = ON
