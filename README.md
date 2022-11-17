@@ -16,6 +16,10 @@ chmod +x install
 ./install
 ```
 
+### Dependencies
+- whiptail
+- sudo
+
 ### Customization
 'mnt' is a configurable program. Location of the configuration file ~/.config/mnt.ini
 You can configure:
@@ -43,6 +47,3 @@ You can configure:
   # The directory where the disks will be mounted.
   mountpoint = '/mnt'
   ```
-
-### Dependencies
-- whiptail
