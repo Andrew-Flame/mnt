@@ -37,11 +37,11 @@ You can configure:
 - Some other values:
   ```INI
   [general]
-    # The language in which the program will be output.
-    language = 'en'
+  # The language in which the program will be output.
+  language = 'en'
 
-    # The directory where the disks will be mounted.
-    mountpoint = '/mnt'
+  # The directory where the disks will be mounted.
+  mountpoint = '/mnt'
   ```
 
 ### Dependencies
