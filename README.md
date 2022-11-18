@@ -1,7 +1,8 @@
 <div align=center style='text-align: center'>
     <img src='images/logo.svg' width=20%/><br>
     <img src='https://img.shields.io/github/repo-size/Andrew-Flame/mnt?style=for-the-badge'/>
-    <img src='https://img.shields.io/github/license/Andrew-Flame/mnt?color=%233FBA12&style=for-the-badge'><br>
+    <img src='https://img.shields.io/github/v/release/Andrew-Flame/mnt?style=for-the-badge'/>
+    <img src='https://img.shields.io/github/license/Andrew-Flame/mnt?color=%230CD94E&style=for-the-badge'/><br>
 </div>
 
 # MNT
@@ -30,7 +31,7 @@ You can configure:
   Disk I = I
   Disk H = H
   ```
-- The display of disks in the dialog window. Example
+- The display of disks in the dialog window. Example:
   ```INI
   [display]
   # Default: ON
