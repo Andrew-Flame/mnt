@@ -4,7 +4,13 @@
 chmod 700 -R .
 chmod 755 install mnt configure
 
-touch ~/.config/mnt.ini # Create config file if it doesn't exists
+touch ~/.config/mnt.ini  # Create config file if it doesn't exists
+
+# Create a directory where additional files will be stored
+sudo mkdir -p /usr/lib/mnt
+sudo rm -rf /usr/lib/mnt/langs  # Delete old dictionaries
+sudo cp -r langs /usr/lib/mnt/langs  # Copy dictionaries
+sudo chmod 755 /usr/lib/mnt -R  # Set permissions
 
 # Fill in the configuration file with data from the template
 if [[ -z $(cat ~/.config/mnt.ini) ]] # If config file is empty
@@ -16,7 +22,7 @@ else
     if [[ $(echo $ans | tr [:upper:] [:lower:]) =~ ^y.*$ ]]
     then
         echo
-        source configure
+        ./configure
         echo
     fi
 fi
@@ -27,18 +33,12 @@ then
     echo 'You need to install "whiptail" to your distribution'
 fi
 
-if [[ ! -e /usr/bin/mnt ]] # If link doesn't exist
+if [[ -z $(command -v mnt) ]]
 then
     # Create a link for this programm if directory with binary files
     sudo ln ./mnt /usr/bin/mnt
-else # If link or file already exists
-    if [[ ! -e /usr/sbin/mnt ]] # Trying to install in the sbin folder
-    then
-        sudo ln ./mnt /usr/sbin/mnt
-    else
-        echo 'File /usr/bin/mnt already exists'
-        exit 1
-    fi
+else # If link or file already installed
+    echo 'mnt already installed'
 fi
 
 echo 'The program has been successfully installed on your computer'

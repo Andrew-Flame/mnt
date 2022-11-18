@@ -1,0 +1,5 @@
+Disk mount dialog  # Whiptail window title
+Select the disks to mount  # Whiptail description
+The operation was canceled by user  # The message displayed when canceling
+was mounted to # Part of the message when the disk is mounted successfully
+was unmounted  # Part of the message when the disk is successfully unmounted
