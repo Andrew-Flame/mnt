@@ -27,7 +27,7 @@ chmod +x install
 ### Customization
 'mnt' is a configurable program. Location of the configuration file ~/.config/mnt.ini
 You can configure:
-- The name of the folder where each disk will be mounted. For this purpose, the file has a section '[associations]':
+- The name of the folder where each disk will be mounted. Section '[associations]':
   ```INI
   [associations]
   Disk C = C
