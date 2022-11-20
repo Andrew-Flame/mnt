@@ -1,8 +1,7 @@
 #!/usr/bin/bash
 
 # Set permissions
-chmod 700 -R .
-chmod 755 install mnt configure
+chmod 755 -R .
 
 touch ~/.config/mnt.ini  # Create config file if it doesn't exists
 
@@ -27,19 +26,35 @@ else
     fi
 fi
 
-# Check dependencies
-if [[ -z $(command -v whiptail) ]]
-then
-    echo 'You need to install "whiptail" to your distribution'
-fi
-
 if [[ -z $(command -v mnt) ]]
 then
     # Create a link for this programm if directory with binary files
     sudo ln ./mnt /usr/bin/mnt
+    echo 'The program has been successfully installed on your computer'
 else # If link or file already installed
     echo 'mnt already installed'
 fi
 
-echo 'The program has been successfully installed on your computer'
+# Check dependencies
+echo -e "\nChecking dependencies:"
+OK=true
+for var in whiptail sudo
+do
+    if [[ -z $(command -v $var) ]]
+    then
+        OK=false
+        echo -e " \033[31m[X] $var\033[0m"
+    else
+        echo -e " \033[32m[✔] $var\033[0m"
+    fi
+done
+
+if [[ $OK == true ]]
+then 
+    echo -e "\nAll dependencies are already installed"
+else 
+    echo -e "\nThere are missing dependencies. 
+Please install them with your distribution's package manager"
+fi
+
 exit 0 # The program worked without errors
