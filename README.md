@@ -11,6 +11,16 @@
 ### Description
 'mnt' is a program that allows you to quickly mount and unmount disk devices in Linux-based operating systems. It will allow you to save a lot of time when mounting disks in systems with or without a graphical environment.
 
+### Usage
+Everything you need to do to use 'mnt':
+1) Call the program from the terminal
+2) Mark the disks that should be mounted and uncheck those that you want to unmount
+3) Press the 'OK' button in the whiptail window or the 'Enter' key on the keyboard
+
+It's incredibly simple and quick, and will also help you save a lot of time!
+
+![mnt](https://user-images.githubusercontent.com/82677442/203862003-0da65345-417c-4193-9d4a-e344ad100ab4.gif)
+
 ### Installation
 There is a ready-made script in the root directory of the repository that will install the program for you. You only need to run it and follow the instructions:
 ```BASH
