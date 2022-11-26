@@ -28,10 +28,11 @@ fi
 
 if [[ -z $(command -v mnt) ]]
 then
-    # Create a link for this programm if directory with binary files
-    sudo ln ./mnt /usr/bin/mnt
+    # Copy program to binary directory
+    sudo cp ./mnt /usr/bin/
+    sudo chmod 755 /usr/bin/mnt
     echo 'The program has been successfully installed on your computer'
-else # If link or file already installed
+else # If already installed
     echo 'mnt already installed'
 fi
 
