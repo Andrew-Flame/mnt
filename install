@@ -3,7 +3,8 @@
 # Set permissions
 chmod 755 -R .
 
-touch ~/.config/mnt.ini  # Create config file if it doesn't exists
+mkdir -p ~/.config  # Create config directory if it doesn't exist
+touch ~/.config/mnt.ini  # Create config file if it doesn't exist
 
 # Create a directory where additional files will be stored
 sudo mkdir -p /usr/lib/mnt
