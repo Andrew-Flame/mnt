@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-touch ~/.config/mnt.ini # Create config file if it doesn't exists
+mkdir -p ~/.config  # Create config directory if it doesn't exist
+touch ~/.config/mnt.ini  # Create config file if it doesn't exist
 
 # Get all disk parts with labels with simple regex
 DATA=$(lsblk -nio LABEL | expand)
@@ -30,4 +31,3 @@ grep -v '<placeholder>display</placeholder>' >> ~/.config/mnt.ini
 echo 'The configuration file was successfully created!
 Its location is ~/.config/mnt.ini
 You can manually change any values specified in it'
-exit 0 # The program worked without errors
