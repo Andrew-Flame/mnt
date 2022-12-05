@@ -5,7 +5,8 @@ function getConfigSection() {
     COUNT=$(grep -A64 -Ex "^\[$1\]$" ~/.config/mnt.ini | grep -Ex "^\[.*\]" -c)
     if [[ "$COUNT" -eq "1" ]]
     then
-        grep -A64 -Ex "^\[$1\]$" ~/.config/mnt.ini | grep -Ex "^[^#;].*=.*$" | sed "s/ *= */=/g"
+        grep -A64 -Ex "^\[$1\]$" ~/.config/mnt.ini | grep -Ex "^[^#;].*=.*$" | 
+        sed "s/ *= */=/g"
     else
         grep -A64 -Ex "^\[$1\]$" ~/.config/mnt.ini | 
         grep -B64 -Ex "^\[[^${1:0:1}].*\]$" -m1 | grep -Ex "^[^#;].*=.*$" | 
@@ -14,7 +15,8 @@ function getConfigSection() {
 }
 
 # Get all disk parts with labels with simple regex
-DATA=$(lsblk -nio PATH,LABEL | expand | grep -E '^/dev/\w{3}[0-9]+.*(\w|\d)+')
+DATA=$(lsblk -nio PATH,LABEL | expand | 
+    grep -E '^/dev/[a-zA-Z]{3}[0-9]*.*[a-zA-Z0-9]+')
 IFS=$'\n' # Only new-line charachter is separator
 
 declare -A assoc # Associative array with parts labels

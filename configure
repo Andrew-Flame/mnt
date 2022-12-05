@@ -19,12 +19,12 @@ done
 
 grep -B64 '<placeholder>associations</placeholder>' templates/config.ini | 
 grep -v '<placeholder>associations</placeholder>' > ~/.config/mnt.ini
-echo ${ASSOC:0:-1} | tr '/' '\n' >> ~/.config/mnt.ini
+echo ${ASSOC:0:${#ASSOC}} | tr '/' '\n' >> ~/.config/mnt.ini
 grep -A64 '<placeholder>associations</placeholder>' templates/config.ini | 
 grep -v '<placeholder>associations</placeholder>' |
 grep -B64 '<placeholder>display</placeholder>' | 
 grep -v '<placeholder>display</placeholder>' >> ~/.config/mnt.ini
-echo ${IGNORING:0:-1} | tr '/' '\n' >> ~/.config/mnt.ini
+echo ${IGNORING:0:${#ASSOC}} | tr '/' '\n' >> ~/.config/mnt.ini
 grep -A64 '<placeholder>display</placeholder>' templates/config.ini | 
 grep -v '<placeholder>display</placeholder>' >> ~/.config/mnt.ini
 
