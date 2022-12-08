@@ -78,6 +78,13 @@ done
 
 width=$((${#dict[1]}+4)) #A whiptail width
 
+# If no disks available to mount
+if [[ ${#parts[*]} == 0 ]]
+then 
+    echo "No disks available to mount"
+    exit 1
+fi
+
 # Get the list of disks in the required form
 declare -a REQUEST
 OFF=0
@@ -103,7 +110,7 @@ ${REQUEST[*]} 3>&1 1>&2 2>&3)
 if [[ $? != 0 ]]
 then
     echo ${dict[2]}
-    exit 1
+    exit 2
 fi
 
 # We mount the marked disks and unmount the unmarked ones
